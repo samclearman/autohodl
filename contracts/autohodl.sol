@@ -9,19 +9,28 @@ contract Autohodl
   {
   }
 
-  /**
-   * @dev Deposits some eth.
-   */
-  function hodl(address hodler, uint lockSeconds) payable public {
-    lockedUntil[hodler] = block.timestamp + lockSeconds;
-    balances[hodler] = balances[hodler] + msg.value;
-  }
-
+  
   function _isLocked(address hodler) private view returns (bool) {
     if (block.timestamp <= lockedUntil[hodler]) {
       return true;
     }
     return false;
+  }
+
+  /**
+   * @dev Deposits some eth.
+   */
+  function hodl(address hodler, uint lockSeconds) payable public {
+    uint newLock;
+    uint requestedLock = block.timestamp + lockSeconds;
+    if (requestedLock > lockedUntil[hodler]) {
+      require(msg.sender == hodler);
+      newLock = requestedLock;
+    } else {
+      newLock = lockedUntil[hodler];
+    }
+    lockedUntil[hodler] = newLock;
+    balances[hodler] = balances[hodler] + msg.value;
   }
 
   /**

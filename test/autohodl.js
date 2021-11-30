@@ -56,4 +56,21 @@ describe("Autohodl contract", function () {
     expect(balancePre.sub(balancePost).sub(r1.gasUsed.mul(r1.effectiveGasPrice)).sub(r2.gasUsed.mul(r2.effectiveGasPrice)).toNumber()).to.equal(0);
   });
 
+  it("Should only extend lock times", async function () {
+    const [owner, hodler] = await ethers.getSigners();
+
+    const autohodlFactory = await ethers.getContractFactory("Autohodl");
+    const autohodlContract = await autohodlFactory.deploy();
+
+    const hodlerAddr = await hodler.getAddress();
+    const hodlValue = 1234;
+    const hodlTime = 100;
+
+    await autohodlContract.connect(hodler).hodl(hodlerAddr, hodlTime, { value: hodlValue });
+    const lockedUntil = await autohodlContract.lockedUntilOf(hodlerAddr);
+    expect(lockedUntil * 1000).to.be.gt(Date.now())
+
+    await autohodlContract.connect(hodler).hodl(hodlerAddr, 1, { value: hodlValue });
+    expect(await autohodlContract.lockedUntilOf(hodlerAddr)).to.equal(lockedUntil);
+  });
 });
