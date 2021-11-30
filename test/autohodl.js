@@ -16,6 +16,7 @@ describe("Autohodl contract", function () {
     await autohodlContract.connect(hodler).hodl(hodlerAddr, hodlTime, { value: hodlValue });
     const contractBalance = await provider.getBalance(autohodlContract.address);
     expect(contractBalance.toNumber()).to.equal(hodlValue)
+    expect(await autohodlContract.balanceOf(hodlerAddr)).to.equal(hodlValue);
   });
 
   it("Shouldn't return money immediately", async function () {

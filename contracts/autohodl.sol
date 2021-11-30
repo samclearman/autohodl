@@ -17,7 +17,7 @@ contract Autohodl
     balances[hodler] = balances[hodler] + msg.value;
   }
 
-  function _isLocked(address hodler) private returns (bool) {
+  function _isLocked(address hodler) private view returns (bool) {
     if (block.timestamp <= lockedUntil[hodler]) {
       return true;
     }
@@ -28,13 +28,21 @@ contract Autohodl
    * @dev Withdraws the balance
    */
   function withdraw(address to) public {
-      if (_isLocked(to)) {
-          return;
-      }
+    if (_isLocked(to)) {
+      return;
+    }
     uint v = balances[to];
     balances[to] = 0;
     (bool success, ) = to.call{value: v}("");
     require(success, "Transfer failed.");
+  }
+
+  function balanceOf(address hodler) public view returns (uint) {
+    return balances[hodler];
+  }
+
+  function lockedUntilOf(address hodler) public view returns (uint) {
+    return lockedUntil[hodler];
   }
 
 }
