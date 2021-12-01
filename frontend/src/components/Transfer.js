@@ -35,7 +35,7 @@ export function Transfer({ lockTokens }) {
           <input className="form-control" type="number" name="lockDays" placeholder="1" required />
         </div>
         <div className="form-group">
-          <input className="btn btn-primary" type="submit" value="Transfer" />
+          <input className="btn btn-primary" type="submit" value="Hodl" />
         </div>
       </form>
     </div>
