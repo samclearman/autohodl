@@ -144,12 +144,13 @@ export class Dapp extends React.Component {
             )}
 
             {this.state.balance.gt(0) && (
+              <><hr />
               <Withdraw
                 withdrawTokens={() =>
                   this._withdrawTokens()
                 }
                 disabled={this.state.lockedUntil.toNumber() * 1000 > Date.now()}
-              />
+              /></>
             )}
           </div>
         </div>
@@ -263,7 +264,7 @@ export class Dapp extends React.Component {
   }
 
   async _withdrawTokens() {
-    await this._sendTransaction(() => this.autohodl.withdraw(this.state.selectedAddress));
+    await this._sendTransaction(() => this._autohodl.withdraw(this.state.selectedAddress));
   }
 
   async _sendTransaction(transaction) {

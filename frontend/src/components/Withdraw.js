@@ -3,11 +3,10 @@ import React from "react";
 export function Withdraw({ withdrawTokens, disabled }) {
   return (
     <div>
-      Use this button to withdraw your eth (once the lock has expired)
+      <h6>Use this button to withdraw your eth (once the lock has expired)</h6>
       <form
         onSubmit={(event) => {
-          // This function just calls the transferTokens callback with the
-          // form's data.
+          event.preventDefault();
           withdrawTokens();
         }}
       >
