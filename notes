@@ -1,0 +1,5 @@
+to deploy frontend to samclearman.com:
+
+REACT_APP_NETWORK=ropsten PUBLIC_URL=/autohodl npm run-script build
+rm -r ~/old\ computer/samclearman.com/static/autohodl
+cp -r build ~/old\ computer/samclearman.com/static/autohodl

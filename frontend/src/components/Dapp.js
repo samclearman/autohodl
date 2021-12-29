@@ -6,7 +6,7 @@ import { ethers } from "ethers";
 // We import the contract's artifacts and address here, as we are going to be
 // using them with ethers
 import TokenArtifact from "../contracts/Autohodl.json";
-import contractAddress from "../contracts/contract-address.json";
+import contractAddresses from "../contracts/contract-address.json";
 
 // All the logic of this dapp is contained in the Dapp component.
 // These other components are just presentational ones: they don't have any
@@ -22,7 +22,13 @@ import { NoTokensMessage } from "./NoTokensMessage";
 
 // Here's a list of network ids https://docs.metamask.io/guide/ethereum-provider.html#properties
 // to use when deploying to other networks.
-const HARDHAT_NETWORK_ID = '31337';
+const network = process.env.REACT_APP_NETWORK || 'hardhat';
+const networkVersions = {
+  hardhat: '31337',
+  ropsten: '3'
+};
+const networkVersion = networkVersions[network];
+const contractAddress = contractAddresses[network];
 
 export class Dapp extends React.Component {
   constructor(props) {
@@ -309,12 +315,12 @@ export class Dapp extends React.Component {
 
   // This method checks if Metamask selected network is Localhost:8545 
   _checkNetwork() {
-    if (window.ethereum.networkVersion === HARDHAT_NETWORK_ID) {
+    if (window.ethereum.networkVersion === networkVersion) {
       return true;
     }
 
     this.setState({ 
-      networkError: 'Please connect Metamask to Localhost:8545'
+      networkError: `Please connect to ${network}`
     });
 
     return false;
